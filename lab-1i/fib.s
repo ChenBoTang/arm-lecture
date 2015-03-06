@@ -11,14 +11,17 @@
 fibonacci:
 	@ ADD/MODIFY CODE BELOW
 	@ PROLOG
-	push {r3, r4, r5, lr}
+	push {r3, r4, lr}
 
 	mov r3, #-1	@ r3 is previous
 	mov r4, #1	@ r4 is result
 .LOOP:
-	add r5, r4, r3	@ sum = result + previous
-	mov r3, r4	@ previous = result
-	mov r4, r5	@ result = sua
+	add r3, r4, r3	@ sum = result + previous
+			@ previous = result
+
+	eor r3, r4	@ swap r3 and r4
+	eor r4, r3
+	eor r3, r4
 
 	subs r0, #1
 	blt  .FINISH
@@ -27,7 +30,7 @@ fibonacci:
 .FINISH:
 	mov r0, r4
 
-	pop {r3, r4, r5, pc}		@EPILOG
+	pop {r3, r4, pc}		@EPILOG
 
 	@ END CODE MODIFICATION
 
