@@ -4,6 +4,11 @@ LDFLAGS = -fno-stack-protector
 
 objects	= fibseq.o fib.o
 
+OUTPUT_FILE = output.txt
+ANSWER_FILE = fib.answer
+GNUPLOT_FILE = iterative_fib_time
+TEMP_FILE = temp.txt
+
 default: fibseq
 
 .PHONY: default clean qemu
@@ -22,13 +27,9 @@ fibseq.o: fibseq.c
 
 clean:
 	rm -f $(objects) fibseq
+	rm -rf $(OUTPUT_FILE) $(GNUPLOT_FILE) $(TEMP_FILE)
 
 QEMU_CMD = qemu-arm -L /usr/arm-linux-gnueabihf ./fibseq &
 CMD = yes 9 | $(call QEMU_CMD) && sleep 1
 qemu: fibseq
-	@yes 5 | $(call QEMU_CMD)
-	@sleep 1
-	@yes 6 | $(call QEMU_CMD)
-	@sleep 1
-	@yes 7 | $(call QEMU_CMD)
-	@sleep 1
+	@bash ./unittest.sh ${OUTPUT_FILE} ${ANSWER_FILE} ${GNUPLOT_FILE} ${TEMP_FILE}
